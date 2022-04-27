@@ -1,10 +1,10 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import axios from 'axios';
 import Header from './components/Header';
 import Drawer from './components/Drawer';
 import AppContext from './context';
-
+import { BrowserRouter as Router } from "react-router-dom";
 import Home from './pages/Home';
 import Favorites from './pages/Favorites';
 import Orders from './pages/Orders';
@@ -114,37 +114,35 @@ function App() {
         setCartOpened,
         setCartItems,
       }}>
-      <div className="wrapper clear">
-        <Drawer
-          items={cartItems}
-          onClose={() => setCartOpened(false)}
-          onRemove={onRemoveItem}
-          opened={cartOpened}
-        />
 
-        <Header onClickCart={() => setCartOpened(true)} />
-
-        <Route path="/" exact>
-          <Home
-            items={items}
-            cartItems={cartItems}
-            searchValue={searchValue}
-            setSearchValue={setSearchValue}
-            onChangeSearchInput={onChangeSearchInput}
-            onAddToFavorite={onAddToFavorite}
-            onAddToCart={onAddToCart}
-            isLoading={isLoading}
+      <Router>
+        <div className="wrapper clear">
+          <Drawer
+            items={cartItems}
+            onClose={() => setCartOpened(false)}
+            onRemove={onRemoveItem}
+            opened={cartOpened}
           />
-        </Route>
 
-        <Route path="/favorites" exact>
-          <Favorites />
-        </Route>
+          <Header onClickCart={() => setCartOpened(true)} />
+          <Routes>
+            <Route path="/" element={<Home
+                items={items}
+                cartItems={cartItems}
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+                onChangeSearchInput={onChangeSearchInput}
+                onAddToFavorite={onAddToFavorite}
+                onAddToCart={onAddToCart}
+                isLoading={isLoading}
+              />}/>
+            <Route path="/favorites" element={ <Favorites />}/>
+            <Route path="/orders"  element={ <Orders />} />
+          </Routes>
 
-        <Route path="/orders" exact>
-          <Orders />
-        </Route>
-      </div>
+        </div>
+      </Router>
+
     </AppContext.Provider>
   );
 }
